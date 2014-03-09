@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' unless defined?(Gem)
+require 'vmreverter'
+
+Vmreverter::CLI.new.execute!
+
+puts "done."
+exit 0
