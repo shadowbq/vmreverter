@@ -4,8 +4,6 @@ require 'yaml'
 
 require 'rubygems' unless defined?(Gem)
 
-require 'pry'
-require 'pry-nav'
 module Vmreverter
   $:.unshift(File.dirname(__FILE__))
 
@@ -26,4 +24,4 @@ module Vmreverter
     end
   end
 
-end    
+end
