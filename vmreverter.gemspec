@@ -4,7 +4,6 @@ require File.expand_path('../lib/vmreverter/version', __FILE__)
 
 require 'rbconfig'
 ruby_conf = defined?(RbConfig) ? RbConfig::CONFIG : Config::CONFIG
-less_than_one_nine = ruby_conf['MAJOR'].to_i == 1 && ruby_conf['MINOR'].to_i < 9
 
 Gem::Specification.new do |s|
   s.name        = "vmreverter"
@@ -25,14 +24,12 @@ Gem::Specification.new do |s|
 
   # Testing dependencies
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-nav'
- 
+
 
   # Run time dependencies
   s.add_runtime_dependency 'json', '~> 2.0.3'
   # Fix bug with interdepency of rbnmomi and nokogiri https://github.com/vmware/rbvmomi/issues/31
-  s.add_runtime_dependency 'nokogiri', '1.5.5'
+  s.add_runtime_dependency 'nokogiri', '~> 1.5.5'
   s.add_runtime_dependency 'rbvmomi', '~> 1.9.4'
   s.add_runtime_dependency 'blimpy', '~> 0.6.7'
 end
