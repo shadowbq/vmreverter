@@ -1,6 +1,7 @@
 *.gem
 *.rbc
 *.dat
+*.lock
 .bundle
 .config
 build.sh

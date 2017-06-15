@@ -30,9 +30,9 @@ Gem::Specification.new do |s|
  
 
   # Run time dependencies
-  s.add_runtime_dependency 'json'
+  s.add_runtime_dependency 'json', '~> 2.0.3'
   # Fix bug with interdepency of rbnmomi and nokogiri https://github.com/vmware/rbvmomi/issues/31
   s.add_runtime_dependency 'nokogiri', '1.5.5'
-  s.add_runtime_dependency 'rbvmomi'
-  s.add_runtime_dependency 'blimpy'
+  s.add_runtime_dependency 'rbvmomi', '~> 1.9.4'
+  s.add_runtime_dependency 'blimpy', '~> 0.6.7'
 end
