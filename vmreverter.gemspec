@@ -2,9 +2,6 @@
 $:.push File.expand_path("../lib", __FILE__)
 require File.expand_path('../lib/vmreverter/version', __FILE__)
 
-require 'rbconfig'
-ruby_conf = defined?(RbConfig) ? RbConfig::CONFIG : Config::CONFIG
-
 Gem::Specification.new do |s|
   s.name        = "vmreverter"
   s.authors     = ["shadowbq"]
@@ -19,6 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.version       = Vmreverter::VERSION
   s.licenses      = ["BSD3", "APACHE2"]
+  s.required_ruby_version = '>= 2.2.7'
 
   s.add_development_dependency 'bundler', '~> 1.0'
 
