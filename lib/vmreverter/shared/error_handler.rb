@@ -12,8 +12,13 @@ module Vmreverter
         logger.pretty_backtrace(bt).each_line do |line|
           logger.error(line)
         end
-        #raise e
-        abort
+        if @options
+          if @options[:abort]
+            abort
+          end  
+        else
+          raise e
+        end
       end
 
     end

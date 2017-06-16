@@ -15,6 +15,9 @@ module Vmreverter
       @options = {}
       @options_from_file = {}
 
+      # CLI exits cleanly, raise for library usage
+      @defaults[:aborts] = true
+
       optparse = OptionParser.new do|opts|
         # Set a banner
         opts.banner = "Usage: #{File.basename($0)} #{::Vmreverter::VERSION} [options...]"
