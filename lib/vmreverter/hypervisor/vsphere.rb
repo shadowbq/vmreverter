@@ -1,15 +1,15 @@
 # Apache Licensed - (github/puppetlabs) ripped from puppet_acceptance. ** See Legal notes
 # Changes include namespace swaps, method removal, method additions, and complete code refactoring
-module Vmreverter 
+module Vmreverter
   class Vsphere
 
-    def initialize(vsphere_hosts, options, config)
-      @options = options
+    def initialize(vsphere_hosts, config)
       @config = config
-      @logger = options[:logger]
+      @options = config[:options]
+      @logger = config[:logger]
       @vsphere_hosts = vsphere_hosts
       require 'yaml' unless defined?(YAML)
-      vsphere_credentials = VsphereHelper.load_config options[:auth]
+      vsphere_credentials = VsphereHelper.load_config @options[:auth]
 
       @logger.notify "Connecting to vSphere at #{vsphere_credentials[:server]}" + " with credentials for #{vsphere_credentials[:user]}"
 
@@ -23,19 +23,19 @@ module Vmreverter
 
       #Index Hosts Available via rbvmomi
       vms = @vsphere_helper.find_vms(@vsphere_vms.keys)
-      
+
       # Test if host exists and host's snapshot requested exists
       @vsphere_vms.each_pair do |name, snap|
         #Find Host in Index
         report_and_raise(@logger, RuntimeError.new("Couldn't find VM #{name} in vSphere!"), "VSphere::initialize") unless vm = vms[name]
         #snap ~> config['HOSTS'][vm]['snapshot']
-        report_and_raise(@logger, RuntimeError.new("Could not find snapshot '#{snap}' for VM #{vm.name}!"), "VSphere::initialize")  unless @vsphere_helper.find_snapshot(vm, snap) 
+        report_and_raise(@logger, RuntimeError.new("Could not find snapshot '#{snap}' for VM #{vm.name}!"), "VSphere::initialize")  unless @vsphere_helper.find_snapshot(vm, snap)
       end
 
-      return self    
+      return self
     end
 
-    def invoke 
+    def invoke
       revert
     end
 
@@ -43,16 +43,16 @@ module Vmreverter
       @vsphere_helper.close_connection
     end
 
-    private 
-    
+    private
+
     def revert
       @logger.notify "Begin Reverting"
-      @vsphere_vms.each_pair do |name, snap|        
+      @vsphere_vms.each_pair do |name, snap|
 
         vm = @vsphere_helper.find_vms(@vsphere_vms.keys)[name]
         @logger.notify "Reverting #{vm.name} to snapshot '#{snap}'"
         start = Time.now
-        
+
         # This will block for each snapshot...
         # The code to issue them all and then wait until they are all done sucks
         snapshot = @vsphere_helper.find_snapshot(vm, snap)
@@ -60,7 +60,7 @@ module Vmreverter
 
         time = Time.now - start
         @logger.notify "Spent %.2f seconds reverting" % time
-        
+
         if (@config['HOSTS'][name]['power'] == 'up')
           host_power_on(vm)
         elsif (@config['HOSTS'][name]['power'] == 'down')
@@ -90,7 +90,7 @@ module Vmreverter
         end
     end
 
-    
+
 
   end
 end

@@ -10,17 +10,17 @@ module Vmreverter
       @logger.debug "No post-provisioning configuration necessary for #{self.class.name} boxes"
     end
 
-    def self.register type, hosts_to_provision, options, config
-      @logger = options[:logger]
-      @logger.notify("Hypervisor found some #{type} boxes to hook") 
+    def self.register(type, hosts_to_provision, config)
+      @logger = config[:logger]
+      @logger.notify("Hypervisor found some #{type} boxes to hook")
       case type.downcase
         when /vsphere/
-          return Vmreverter::Vsphere.new hosts_to_provision, options, config
+          return Vmreverter::Vsphere.new(hosts_to_provision, config)
         when /aws/
-          return Vmreverter::AWS.new hosts_to_provision, options, config
+          return Vmreverter::AWS.new(hosts_to_provision, config)
         else
           report_and_raise(@logger, RuntimeError.new("Missing Class for hypervisor invocation: (#{type})"), "Hypervisor::register")
-      end    
+      end
     end
   end
 end

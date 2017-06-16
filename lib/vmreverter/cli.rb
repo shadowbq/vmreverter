@@ -1,3 +1,4 @@
+require 'pry'
 module Vmreverter
   class CLI
     def initialize
@@ -7,7 +8,9 @@ module Vmreverter
 
       if @options[:lockfile]
         if Pathname.new(@options[:lockfile]).exist?
-          report_and_raise(@logger, ArgumentError.new("Specified lockfile path '#{@options[:lockfile].dirname}' is locked."), "Lockfile is locked")
+          report_and_raise(@logger, ArgumentError.new("Specified lockfile path '#{@options[:lockfile]}' is locked."), "Lockfile is locked")
+        else
+          FileUtils.touch(@options[:lockfile])
         end
       end
 
@@ -38,15 +41,19 @@ module Vmreverter
       begin
         trap(:INT) do
           @logger.warn "Interrupt received; exiting..."
+          FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]
           exit(1)
         end
 
         begin
-          @vmmanager = Vmreverter::VMManager.new(@config, @options, @logger)
+          binding.pry
+          @vmmanager = Vmreverter::VMManager.new(@config, @options)
           @vmmanager.invoke
           @vmmanager.close_connection
         rescue => e
           raise e
+        ensure
+          FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]  
         end
 
       end #trap

@@ -2,6 +2,7 @@ require 'optparse'
 require 'open-uri'
 require 'yaml'
 require 'pathname'
+require 'fileutils'
 
 require 'rubygems' unless defined?(Gem)
 
