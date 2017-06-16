@@ -13,7 +13,11 @@ module Vmreverter
 
       @logger.notify "Connecting to vSphere at #{vsphere_credentials[:server]}" + " with credentials for #{vsphere_credentials[:user]}"
 
-      @vsphere_helper = VsphereHelper.new( vsphere_credentials )
+      begin
+        @vsphere_helper = VsphereHelper.new( vsphere_credentials, @logger )
+      rescue Exception => e
+        report_and_raise(@logger, e, "VSphere::connection")
+      end
 
       #Transpose Hash for @vsphere_vms = {"test-server01" => "gold-image", "test-server02" => "silver-image"}
       @vsphere_vms = {}

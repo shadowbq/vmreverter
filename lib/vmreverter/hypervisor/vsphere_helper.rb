@@ -1,14 +1,8 @@
 # Apache Licensed - (github/puppetlabs) ripped from puppet_acceptance. ** See Legal notes
 # Changes include namespace swaps, and refactoring
 
-begin
-  require 'Vmreverter/logger'
-rescue LoadError
-  require File.expand_path(File.join(File.dirname(__FILE__), '..', 'logger.rb'))
-end
-
 class VsphereHelper
-  
+
   #Class methods
   def self.load_config authfile
     vsphere_credentials = {}
@@ -19,7 +13,7 @@ class VsphereHelper
       vInfo = YAML.load_file( File.join(ENV['HOME'], '.fog') )
     else
       report_and_raise(@logger, RuntimeError.new("Couldn't authentication for vSphere in auth file !"), "VSphereHelper::load_config")
-    end  
+    end
 
     begin
       vsphere_credentials[:server] = vInfo[:default][:vsphere_server]
@@ -32,23 +26,24 @@ class VsphereHelper
     return vsphere_credentials
   end
 
-  def initialize vInfo = {}
-    @logger = vInfo[:logger] || Vmreverter::Logger.new
+  def initialize(vInfo, logger)
+
+    @logger = logger
     begin
       require 'rbvmomi'
     rescue LoadError
       raise "Unable to load RbVmomi, please ensure its installed"
     end
-    
-    # If you don’t have trusted SSL certificates installed on the host you’re connecting to, 
-    #you’ll get an +OpenSSL::SSL::SSLError+ “certificate verify failed”. 
+
+    # If you don’t have trusted SSL certificates installed on the host you’re connecting to,
+    #you’ll get an +OpenSSL::SSL::SSLError+ “certificate verify failed”.
     #You can work around this by using the :insecure option to +RbVmomi::VIM.connect+.
-    
+
     @connection = RbVmomi::VIM.connect :host     => vInfo[:server],
                                        :user     => vInfo[:user],
                                        :password => vInfo[:pass],
                                        :insecure => true
-  end  
+  end
   #Instance Methods
   def find_snapshot vm, snapname
     search_child_snaps vm.snapshot.rootSnapshotList, snapname
@@ -184,4 +179,3 @@ class VsphereHelper
     @connection.close
   end
 end
-
