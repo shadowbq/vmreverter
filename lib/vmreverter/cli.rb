@@ -1,4 +1,3 @@
-require 'pry'
 module Vmreverter
   class CLI
     def initialize
@@ -34,7 +33,6 @@ module Vmreverter
 
       Vmreverter::Configuration.build(@options, @logger)
       @config = Vmreverter::Configuration.instance
-      binding.pry
 
     end
 
@@ -48,7 +46,6 @@ module Vmreverter
         end
 
         begin
-          binding.pry
           @vmmanager = Vmreverter::VMManager.new(@config)
           @vmmanager.invoke
           @vmmanager.close_connection
