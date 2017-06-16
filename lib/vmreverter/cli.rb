@@ -1,4 +1,3 @@
-require 'pry'
 module Vmreverter
   class CLI
     def initialize
@@ -46,14 +45,13 @@ module Vmreverter
         end
 
         begin
-          binding.pry
-          @vmmanager = Vmreverter::VMManager.new(@config, @options)
+          @vmmanager = Vmreverter::VMManager.new(@config)
           @vmmanager.invoke
           @vmmanager.close_connection
         rescue => e
           raise e
         ensure
-          FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]  
+          FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]
         end
 
       end #trap
