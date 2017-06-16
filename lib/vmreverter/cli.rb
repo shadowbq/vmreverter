@@ -1,9 +1,10 @@
+require 'pry'
 module Vmreverter
   class CLI
     def initialize
       @options = Vmreverter::Options.parse_args
       @logger = Vmreverter::Logger.new(@options)
-      @options[:logger] = @logger
+
 
       if @options[:lockfile]
         if Pathname.new(@options[:lockfile]).exist?
@@ -31,7 +32,9 @@ module Vmreverter
         end
       end
 
-      @config = Vmreverter::ConfigTester.new(@options[:config], @options)
+      Vmreverter::Configuration.build(@options, @logger)
+      @config = Vmreverter::Configuration.instance
+      binding.pry
 
     end
 
@@ -45,6 +48,7 @@ module Vmreverter
         end
 
         begin
+          binding.pry
           @vmmanager = Vmreverter::VMManager.new(@config)
           @vmmanager.invoke
           @vmmanager.close_connection

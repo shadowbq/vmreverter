@@ -5,8 +5,8 @@ module Vmreverter
 
     def initialize(vsphere_hosts, config)
       @config = config
-      @options = config[:options]
-      @logger = config[:logger]
+      @options = config.options
+      @logger = config.logger
       @vsphere_hosts = vsphere_hosts
       require 'yaml' unless defined?(YAML)
       vsphere_credentials = VsphereHelper.load_config @options[:auth]

@@ -11,7 +11,7 @@ module Vmreverter
     end
 
     def self.register(type, hosts_to_provision, config)
-      @logger = config[:logger]
+      @logger = config.logger
       @logger.notify("Hypervisor found some #{type} boxes to hook")
       case type.downcase
         when /vsphere/

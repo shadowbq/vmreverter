@@ -6,8 +6,8 @@ module Vmreverter
     #Blimpy will import your ~/.ssh/id_rsa.pub or ~/.ssh/id_dsa.pub into a Key Pair in every region that you use in your Blimpfiles.
     def initialize(blimpy_hosts, config)
       @config = config
-      @options = config[:options]
-      @logger = config[:logger]
+      @options = config.options
+      @logger = config.logger
       @blimpy_hosts = blimpy_hosts
       require 'rubygems' unless defined?(Gem)
       require 'yaml' unless defined?(YAML)

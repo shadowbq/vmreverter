@@ -19,7 +19,7 @@ module Vmreverter
   # hypervisor methods and helpers
   require 'vmreverter/hypervisor'
 
-  %w( options vmmanager config_tester cli ).each do |lib|
+  %w( options vmmanager configuration cli ).each do |lib|
     begin
       require "vmreverter/#{lib}"
     rescue LoadError

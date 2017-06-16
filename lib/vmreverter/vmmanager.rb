@@ -16,8 +16,8 @@ module Vmreverter
     attr_accessor :hypervisor_collection
 
     def initialize(config)
-      @logger = config[:logger]
-      @options = config[:options]
+      @logger = config.logger
+      @options = config.options
       @hosts = []
       @config = config
       @hypervisor_collection = {}
