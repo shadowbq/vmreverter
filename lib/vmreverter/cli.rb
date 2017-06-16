@@ -44,17 +44,7 @@ module Vmreverter
           FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]
           exit(1)
         end
-
-        begin
-          @vmmanager = Vmreverter::VMManager.new(@config)
-          @vmmanager.invoke
-          @vmmanager.close_connection
-        rescue => e
-          raise e
-        ensure
-          FileUtils.rm @options[:lockfile], :force => true if @options[:lockfile]
-        end
-
+        Vmreverter::VMManager.execute!(@config)
       end #trap
     end #execute!
 

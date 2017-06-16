@@ -1,3 +1,4 @@
+require 'pry'
 %w(hypervisor).each do |lib|
   begin
     require "vmreverter/#{lib}"
@@ -14,6 +15,20 @@ module Vmreverter
   class VMManager
 
     attr_accessor :hypervisor_collection
+
+
+    def self.execute!(config)
+      begin
+        @vmmanager = Vmreverter::VMManager.new(config)
+        @vmmanager.invoke
+        @vmmanager.close_connection
+      rescue => e
+        raise e
+      ensure
+        FileUtils.rm config.options[:lockfile], :force => true if config.options[:lockfile]
+      end
+    end #execute!
+
 
     def initialize(config)
       @logger = config.logger
