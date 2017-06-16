@@ -43,12 +43,12 @@ module Vmreverter
       dests.each {|dest| add_destination(dest)}
     end
 
-    def add_destination(dest)
+    def add_destination(dest, mode='w')
       case dest
       when IO
         @destinations << dest
       when String
-        @destinations << File.open(dest, 'w')
+        @destinations << File.open(dest, mode)
       else
         raise "Unsuitable log destination #{dest.inspect}"
       end
