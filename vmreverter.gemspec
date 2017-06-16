@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   # Testing dependencies
   s.add_development_dependency 'rake'
   s.add_development_dependency 'bump'
+  s.add_development_dependency 'pry'
 
 
   # Run time dependencies

@@ -1,11 +1,13 @@
 require 'optparse'
 require 'open-uri'
 require 'yaml'
+require 'pathname'
 
 require 'rubygems' unless defined?(Gem)
 
 module Vmreverter
   $:.unshift(File.dirname(__FILE__))
+  require 'vmreverter/version'
 
   # logger
   require 'vmreverter/logger'

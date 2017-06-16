@@ -17,7 +17,7 @@ module Vmreverter
 
       optparse = OptionParser.new do|opts|
         # Set a banner
-        opts.banner = "Usage: #{File.basename($0)} [options...]"
+        opts.banner = "Usage: #{File.basename($0)} #{::Vmreverter::VERSION} [options...]"
 
         @defaults[:auth] = File.join(ENV['HOME'], '.fog')
         opts.on '-a', '--auth FILE',
@@ -28,7 +28,7 @@ module Vmreverter
 
         @defaults[:config] = nil
         opts.on '-c', '--config FILE',
-                'Use configuration FILE', 
+                'Use configuration FILE',
                 "Default: #{@defaults[:config]}" do |file|
           @options[:config] = file
         end
@@ -39,6 +39,13 @@ module Vmreverter
                 'This should evaluate to a ruby hash.',
                 'CLI optons are given precedence.' do |file|
           @options_from_file = parse_options_file file
+        end
+
+        @defaults[:lockfile] = nil
+        opts.on '-l', '--lockfile FILE',
+                'Use a lockfile to prevent concurrency',
+                '(default no lockfile).' do |file|
+          @options[:lockfile] = file
         end
 
         @defaults[:quiet] = false
@@ -80,6 +87,13 @@ module Vmreverter
       @options = @options_from_file.merge(@options)
       # merge in defaults
       @options = @defaults.merge(@options)
+
+      if @options[:lockfile]
+        pn = Pathname.new(@options[:lockfile])
+        unless pn.dirname.writable?
+          raise ArgumentError, "Specified lockfile path '#{pn.dirname}' is not writable. Check permissions."
+        end
+      end
 
       @options
     end
